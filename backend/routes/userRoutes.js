@@ -4,7 +4,9 @@ import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
 import {
   createUsers
-} from "../controllers/authController.js";
+} from "../controllers/userController.js";
+
+const router = express.Router();
 
 router.post(
   "/users/admin/",
@@ -30,7 +32,7 @@ router.post(
 router.post(
   "/users/staff/",
   authenticate,
-  authorizeRoles("SUPER_ADMIN","ADMIN","MANAGER","TL"),
+  authorizeRoles("SUPER_ADMIN","ADMIN","MANAGER"),
   createUsers
 );
 

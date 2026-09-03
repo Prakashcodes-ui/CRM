@@ -6,7 +6,6 @@ import sequelize from "./config/database.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
-import managerRoutes from "./routes/managerRoutes.js"
 
 dotenv.config();
 
