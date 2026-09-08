@@ -2,7 +2,7 @@ import express from "express";
 import { authenticate } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
-import { createLead, updateLeadStatus } from "../controllers/leadController.js";
+import { assignLead, getMyassignedLeads } from "../controllers/leadAssignController.js";
 
 const router = express.Router();
 
@@ -13,24 +13,16 @@ router.post(
         "SUPER_ADMIN",
         "ADMIN",
         "MANAGER",
-        "TL",
-        "STAFF"
+        "TL"
     ),
-    createLead
+    assignLead
 );
 
-router.patch(
-    "/:id/status",
+router.get(
+    "/get-assigned-leads",
     authenticate,
-    authorizeRoles(
-        "SUPER_ADMIN",
-        "ADMIN",
-        "MANAGER",
-        "TL",
-        "STAFF"
-    ),
-    updateLeadStatus
-);
-
+    authorizeRoles("STAFF"),
+    getMyassignedLeads
+)
 
 export default router;

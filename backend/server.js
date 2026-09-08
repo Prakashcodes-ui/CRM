@@ -7,6 +7,7 @@ import sequelize from "./config/database.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import leadRoutes from "./routes/leadRoutes.js";
+import assignedRoutes from "./routes/leadAssignedRoutes.js"
 
 dotenv.config();
 
@@ -18,7 +19,8 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
-app.use("/api/leads")
+app.use("/api/leads", leadRoutes);
+app.use("/api/assignments", assignedRoutes);
 
 const PORT = process.env.PORT || 5000;
 

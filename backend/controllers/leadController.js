@@ -1,19 +1,9 @@
 
 import Lead from "../models/Lead.js";
 
-export const createLead = async (req, res) => {
-
-  try {
-
-    const {
-      name,
-      email,
-      phone,
-      company,
-      source,
-      requirement,
-      lostReason
-    } = req.body;
+export const createLead = async(req, res) => {
+  try{
+    const {name, email, phone, company, source, requirement, status, createdBy, lostReason} = req.body;
 
     const lead = await Lead.create({
       name,
@@ -22,39 +12,36 @@ export const createLead = async (req, res) => {
       company,
       source,
       requirement,
-      createdBy: req.user.id,
-      status: "NEW",
+      status:"NEW",
+      createdBy:req.user.id,
       lostReason
-    });
+    })
 
-    res.status(201).json({
-      message: "Lead created successfully",
-      lead,
-    });
+    res.status(200).json({
+      message:"Lead created successfully",
+      lead
+    })
 
-  } catch (error) {
-
+  }catch(error){
     res.status(500).json({
-      message: "Failed to create lead",
-      error: error.message,
-    });
-
+      message:"Lead created failed",
+      error:error.message
+    })
   }
-};
+}
 
 export const updateLeadStatus = async (req, res) => {
 
   try {
 
-    const { id } = req.params;
-    const { status, lostReason } = req.body;
+    const {id} = req.params;
+    const {status, lostReason} = req.body;
 
     const lead = await Lead.findByPk(id);
-
-    if (!lead) {
-      return res.status(404).json({
-        message: "Lead not found",
-      });
+    if(!lead){
+      res.json({
+        message:"Lead not found"
+      })
     }
 
     await lead.update({

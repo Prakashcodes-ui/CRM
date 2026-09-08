@@ -1,7 +1,5 @@
-// models/LeadAssignment.js
-
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import sequelize from "../config/database.js";
 
 const LeadAssignment = sequelize.define("LeadAssignment", {
         id: {
@@ -27,7 +25,7 @@ const LeadAssignment = sequelize.define("LeadAssignment", {
 
         assignedAt: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
+            allowNull: false,
         },
     },
     {
