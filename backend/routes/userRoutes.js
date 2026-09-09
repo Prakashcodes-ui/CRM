@@ -3,7 +3,7 @@ import { authenticate } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
 import {
-  createUsers
+  createUsers, getAllUsers, updateUsers, userDeleted
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -35,5 +35,25 @@ router.post(
   authorizeRoles("SUPER_ADMIN","ADMIN","MANAGER"),
   createUsers
 );
+
+router.get(
+  "/users",
+  authenticate,
+  authorizeRoles("SUPER_ADMIN"),
+  getAllUsers
+)
+router.put(
+  "/users/:id",
+  authenticate,
+  authorizeRoles("SUPER_ADMIN"),
+  updateUsers
+)
+
+router.delete(
+  "/users/:id/status",
+  authenticate,
+  authorizeRoles("SUPER_ADMIN"),
+  userDeleted
+)
 
 export default router;

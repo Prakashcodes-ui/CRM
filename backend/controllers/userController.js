@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import userServices from "../services/userServices.js"
 
 // USERS CREATED
 export const createUsers = async (req, res) => {
@@ -53,3 +54,48 @@ export const createUsers = async (req, res) => {
   }
 };
 
+
+export const getAllUsers = async(req, res) => {
+  try{
+    const user =await userServices.getAllUsers();
+
+    res.json({
+      message:"All users",
+      user
+    })
+  }catch(error){
+    res.status(500).json({
+      error:error.message
+    })
+  }
+}
+
+export const updateUsers = async(req, res) => {
+  try{
+    const user =await userServices.updateUsers(req.params.id, req.body);
+    if(!user) return res.status(404).json({message:"User not found"})
+    res.json({
+      message:"Updated users",
+      user
+    })
+  }catch(error){
+    res.status(500).json({
+      error:error.message
+    })
+  }
+}
+
+export const userDeleted = async(req, res) => {
+  try{
+    const user =await userServices.userDeleted(req.params.id);
+    if(!user) return res.status(404).json({message:"User not found"})
+    res.json({
+      message:"user deleted",
+      user
+    })
+  }catch(error){
+    res.status(500).json({
+      error:error.message
+    })
+  }
+}

@@ -31,9 +31,10 @@ export const assignLead = async (req, res) => {
             }
         );
 
+        const leads = assignment.map(assignment => assignment.lead);
         res.json({
             message:"Lead Assigned successfully",
-            assignment
+            leads
         })
     }catch(error){
         res.status(500).json({
