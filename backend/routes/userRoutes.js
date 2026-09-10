@@ -3,7 +3,7 @@ import { authenticate } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
 import {
-  createUsers, getAllUsers, updateUsers, userDeleted
+  createUsers, getAllUsers, getSingleUsers,updateUsers, userDeleted, permanentDelete
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -41,7 +41,16 @@ router.get(
   authenticate,
   authorizeRoles("SUPER_ADMIN"),
   getAllUsers
-)
+);
+
+router.get(
+  "/user/:id",
+  authenticate,
+  authorizeRoles("SUPER_ADMIN"),
+  getSingleUsers
+);
+
+
 router.put(
   "/users/:id",
   authenticate,
@@ -54,6 +63,13 @@ router.delete(
   authenticate,
   authorizeRoles("SUPER_ADMIN"),
   userDeleted
+)
+
+router.delete(
+  "/user/:id",
+  authenticate,
+  authorizeRoles("SUPER_ADMIN"),
+  permanentDelete
 )
 
 export default router;

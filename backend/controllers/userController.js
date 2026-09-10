@@ -60,7 +60,23 @@ export const getAllUsers = async(req, res) => {
     const user =await userServices.getAllUsers();
 
     res.json({
-      message:"All users",
+      message:"All users fecth successfully",
+      user
+    })
+  }catch(error){
+    res.status(500).json({
+      error:error.message
+    })
+  }
+}
+
+export const getSingleUsers = async(req, res) => {
+  try{
+    const user =await userServices.getSingleUsers(req.params.id);
+    
+    if(!user) return res.status(404).json({message:"User not found"})
+    res.json({
+      message:"user fecth successfully",
       user
     })
   }catch(error){
@@ -75,7 +91,7 @@ export const updateUsers = async(req, res) => {
     const user =await userServices.updateUsers(req.params.id, req.body);
     if(!user) return res.status(404).json({message:"User not found"})
     res.json({
-      message:"Updated users",
+      message:"User updated successfully",
       user
     })
   }catch(error){
@@ -90,7 +106,23 @@ export const userDeleted = async(req, res) => {
     const user =await userServices.userDeleted(req.params.id);
     if(!user) return res.status(404).json({message:"User not found"})
     res.json({
-      message:"user deleted",
+      message:"user deleted successfully",
+      user
+    })
+  }catch(error){
+    res.status(500).json({
+      error:error.message
+    })
+  }
+}
+
+export const permanentDelete = async(req, res) => {
+  try{
+    const user =await userServices.permanentDelete(req.params.id);
+    
+    if(!user) return res.status(404).json({message:"User not found"})
+    res.json({
+      message:"user permanent deleted successfully",
       user
     })
   }catch(error){

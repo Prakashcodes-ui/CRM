@@ -15,6 +15,23 @@ const getAllUsers =async () => {
     return user
 };
 
+const getSingleUsers =async (id) => {
+    const user = await User.findOne({
+        where:{
+            id,
+            role:{
+                [Op.ne] :"SUPER_ADMIN"
+            }
+        },
+        attributes:{
+            exclude:["password"]
+        }
+    });
+
+    if(!user) return null;
+    return user
+};
+
 const updateUsers = async(id,data) => {
     const user = await User.findOne({
         where:{
@@ -48,6 +65,24 @@ const userDeleted = async(id) => {
         status:"INACTIVE"
     })
     return deleteuser
+};
+
+const permanentDelete = async(id) => {
+    const user = await User.findOne({
+        where:{
+            id,
+            role:{
+                [Op.ne] :"SUPER_ADMIN"
+            }
+        }
+    });
+    if(!user) return null;
+    const deleteUser = await user.destroy({
+        where:{
+            id
+        }
+    });
+    return deleteUser
 }
-export default {getAllUsers, updateUsers, userDeleted};
+export default {getAllUsers,getSingleUsers, updateUsers, userDeleted, permanentDelete};
 
