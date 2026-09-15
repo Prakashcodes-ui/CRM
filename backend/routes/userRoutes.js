@@ -46,7 +46,7 @@ router.get(
 router.get(
   "/user/:id",
   authenticate,
-  authorizeRoles("SUPER_ADMIN"),
+  authorizeRoles("SUPER_ADMIN","ADMIN"),
   getSingleUsers
 );
 

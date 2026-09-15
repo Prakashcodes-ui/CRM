@@ -72,7 +72,7 @@ export const getAllUsers = async(req, res) => {
 
 export const getSingleUsers = async(req, res) => {
   try{
-    const user =await userServices.getSingleUsers(req.params.id);
+    const user =await userServices.getSingleUsers(req);
     
     if(!user) return res.status(404).json({message:"User not found"})
     res.json({

@@ -8,13 +8,25 @@ const getAllUsers =async (req) => {
     if(role === "SUPER_ADMIN"){
         whereContition = {
             role:{
-                [Op.ne] :"SUPER_ADMIN"
+                [Op.ne] :""
             }
         };
     }else if(role === "ADMIN"){
         whereContition = {
             role:{
+                [Op.notIn] :["SUPER_ADMIN"]
+            }
+        };
+    }else if(role === "MANAGER"){
+        whereContition = {
+            role:{
                 [Op.notIn] :["SUPER_ADMIN", "ADMIN"]
+            }
+        };
+    }else if(role === "TL"){
+        whereContition = {
+            role:{
+                [Op.notIn] :["SUPER_ADMIN", "ADMIN", "MANAGER"]
             }
         };
     }
@@ -28,18 +40,40 @@ const getAllUsers =async (req) => {
     return user
 };
 
-const getSingleUsers =async (id) => {
-    const user = await User.findOne({
-        where:{
+const getSingleUsers =async (req) => {
+    const id = req.params.id;
+    const role = req.user.role;
+    let whereContition = {};
+    if(role === "SUPER_ADMIN"){
+        whereContition = { id };
+    }else if(role === "ADMIN"){
+        whereContition = {
             id,
             role:{
-                [Op.ne] :"SUPER_ADMIN"
+                [Op.notIn] : ["SUPER_ADMIN"]
             }
-        },
+        };
+    }else if(role === "MANAGER"){
+        whereContition = {
+            id,
+            role:{
+                [Op.notIn] : ["SUPER_ADMIN", "ADMIN"]
+            }
+        };
+    }else if(role === "TL"){
+        whereContition = {
+            id,
+            role:{
+                [Op.notIn] : ["SUPER_ADMIN", "ADMIN", "MANAGER"]
+            }
+        };
+    }
+    const user = await User.findOne({
+        where:whereContition,
         attributes:{
-            exclude:["password"]
+                exclude:["password"]
         }
-    });
+    })
 
     if(!user) return null;
     return user
