@@ -1,13 +1,26 @@
 import User from '../models/User.js';
 import { Op, where } from 'sequelize';
 
-const getAllUsers =async () => {
-    const user = await User.findAll({
-        where:{
+const getAllUsers =async (req) => {
+    const role = req.user.role;
+    let whereContition = {};
+
+    if(role === "SUPER_ADMIN"){
+        whereContition = {
             role:{
                 [Op.ne] :"SUPER_ADMIN"
             }
-        },
+        };
+    }else if(role === "ADMIN"){
+        whereContition = {
+            role:{
+                [Op.notIn] :["SUPER_ADMIN", "ADMIN"]
+            }
+        };
+    }
+
+    const user = await User.findAll({
+        where:whereContition,
         attributes:{
             exclude:["password"]
         }
@@ -77,11 +90,7 @@ const permanentDelete = async(id) => {
         }
     });
     if(!user) return null;
-    const deleteUser = await user.destroy({
-        where:{
-            id
-        }
-    });
+    const deleteUser = await user.destroy();
     return deleteUser
 }
 export default {getAllUsers,getSingleUsers, updateUsers, userDeleted, permanentDelete};

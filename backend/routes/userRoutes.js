@@ -39,7 +39,7 @@ router.post(
 router.get(
   "/users",
   authenticate,
-  authorizeRoles("SUPER_ADMIN"),
+  authorizeRoles("SUPER_ADMIN","ADMIN"),
   getAllUsers
 );
 

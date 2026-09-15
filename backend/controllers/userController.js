@@ -57,7 +57,7 @@ export const createUsers = async (req, res) => {
 
 export const getAllUsers = async(req, res) => {
   try{
-    const user =await userServices.getAllUsers();
+    const user =await userServices.getAllUsers(req);
 
     res.json({
       message:"All users fecth successfully",
