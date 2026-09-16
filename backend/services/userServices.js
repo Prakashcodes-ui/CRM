@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import { Op } from 'sequelize';
+import bcrypt from "bcryptjs";
 
 const getAllUsers =async (req) => {
     const role = req.user.role;
@@ -180,16 +181,37 @@ const permanentDelete = async(id) => {
     return deleteUser
 }
 
-const userProfile = async (req) => {
-    const id = req.user.id;
-
-    const user = await User.findOne({
+const userProfile = async (req, data) => {
+    const id = req.user.id;    
+    const users = await User.findOne({
         where:{id},
         attributes:{
                 exclude: ["password", "createdAt", "updatedAt"]
         }
     });
-    return user;
+    return users;
+}
+
+const profileUpdate = async () => {
+    let allowUpdate = {};
+    if(data.name !== undefined){
+        allowUpdate.name = data.name;
+    }
+    if(data.email !== undefined){
+        allowUpdate.email = data.email;
+    }
+    if(data.phone !== undefined){
+        allowUpdate.phone = data.phone;
+    }
+    if(data.password !== undefined){
+        allowUpdate.password = await bcrypt.hash(data.password, 10);
+    }
+
+    const user = await User.findPkBy(id);
+
+    if(!user) return null;
+
+    await user.update(allowUpdate);
 }
 export default {getAllUsers,getSingleUsers, updateUsers, userDeleted, permanentDelete, userProfile};
 

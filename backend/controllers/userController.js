@@ -23,7 +23,7 @@ export const createUsers = async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword =  await bcrypt.hash(password, 10);
 
     const user = await User.create({
       name,
@@ -135,7 +135,7 @@ export const permanentDelete = async(req, res) => {
 export const userProfile = async(req, res) => {
   try{
     const role = req.user.role;
-    const user = await userServices.userProfile(req);
+    const user = await userServices.userProfile(req,req.body);
     res.json({
       message: `${role} Profile fetched successfully`,
       user
