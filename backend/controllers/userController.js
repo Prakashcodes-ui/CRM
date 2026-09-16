@@ -88,7 +88,7 @@ export const getSingleUsers = async(req, res) => {
 
 export const updateUsers = async(req, res) => {
   try{
-    const user =await userServices.updateUsers(req.params.id, req.body);
+    const user =await userServices.updateUsers(req.params.id, req.body, req);
     if(!user) return res.status(404).json({message:"User not found"})
     res.json({
       message:"User updated successfully",
@@ -103,7 +103,7 @@ export const updateUsers = async(req, res) => {
 
 export const userDeleted = async(req, res) => {
   try{
-    const user =await userServices.userDeleted(req.params.id);
+    const user =await userServices.userDeleted(req.params.id, req);
     if(!user) return res.status(404).json({message:"User not found"})
     res.json({
       message:"user deleted successfully",
@@ -123,6 +123,21 @@ export const permanentDelete = async(req, res) => {
     if(!user) return res.status(404).json({message:"User not found"})
     res.json({
       message:"user permanent deleted successfully",
+      user
+    })
+  }catch(error){
+    res.status(500).json({
+      error:error.message
+    })
+  }
+}
+
+export const userProfile = async(req, res) => {
+  try{
+    const role = req.user.role;
+    const user = await userServices.userProfile(req);
+    res.json({
+      message: `${role} Profile fetched successfully`,
       user
     })
   }catch(error){
